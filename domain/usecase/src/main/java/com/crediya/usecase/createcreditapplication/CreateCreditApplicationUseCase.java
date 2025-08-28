@@ -31,7 +31,7 @@ public class CreateCreditApplicationUseCase {
                         Messages.AMOUNT_NOT_IN_RANGE, creditApplication.getCreditAmount()
                 ))))
                 .flatMap( t -> {
-                    creditApplication.setCreditType(t.getCreditTypeId());
+                    creditApplication.setCreditTypeId(t.getCreditTypeId());
                     return stateRepository.findByName(DefaultValues.DEFAULT_APPLICATION_STATE.getValue())
                             .switchIfEmpty(Mono.defer(() -> Mono.error(new NoSuchStateException(Messages.CREDIT_APPLICATION_NOT_FOUND,
                                     DefaultValues.DEFAULT_APPLICATION_STATE.getValue()))))

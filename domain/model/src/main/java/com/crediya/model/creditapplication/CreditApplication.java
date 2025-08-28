@@ -16,5 +16,5 @@ public class CreditApplication {
     Integer installments;
     String email;
     Integer statusId;
-    Integer creditType;
+    Integer creditTypeId;
 }
