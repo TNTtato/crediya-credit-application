@@ -18,7 +18,7 @@ public class HandlerV1 {
     private  final CreateCreditApplicationUseCase useCase;
     private Logger log = LoggerFactory.getLogger(this.getClass());
 
-    public Mono<ServerResponse> listenRegisterUserUseCase(ServerRequest serverRequest) {
+    public Mono<ServerResponse> listenCreateCreditApplicationUseCase(ServerRequest serverRequest) {
         return serverRequest.bodyToMono(CreateApplicationRequest.class)
                 .flatMap(r -> {
                     log.info("Received RegisterUserRequest [{}]", r);
