@@ -1,0 +1,20 @@
+package com.crediya.model.creditapplication;
+import lombok.Builder;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder(toBuilder = true)
+public class CreditApplication {
+    Integer applicationId;
+    Double creditAmount;
+    Integer installments;
+    String email;
+    Integer statusId;
+    Integer creditTypeId;
+}
