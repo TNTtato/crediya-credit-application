@@ -6,4 +6,5 @@ import reactor.core.publisher.Mono;
 public interface CreditTypeRepository {
 
     public Mono<CreditType> findByName(String name);
+    public Mono<CreditType> findById(Integer id);
 }

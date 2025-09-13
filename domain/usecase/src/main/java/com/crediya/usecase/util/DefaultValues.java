@@ -6,7 +6,8 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum DefaultValues {
-    DEFAULT_APPLICATION_STATE("PENDING_REVIEW");
+    DEFAULT_APPLICATION_STATE("PENDING_REVIEW"),
+    APPROVED_APPLICATION("APPROVED");
 
-    private String value;
+    private final String value;
 }
