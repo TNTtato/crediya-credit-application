@@ -1,15 +1,13 @@
 package com.crediya.model.applicationreviewitem;
-import lombok.Builder;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
+@ToString
+@EqualsAndHashCode
 public class ApplicationReviewItem {
 
     private Double amount;

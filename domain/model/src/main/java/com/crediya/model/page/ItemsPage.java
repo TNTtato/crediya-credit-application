@@ -10,6 +10,8 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
+@EqualsAndHashCode
 public class ItemsPage<T> {
     private Integer page;
     private Integer size;

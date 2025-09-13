@@ -1,5 +1,6 @@
 package com.crediya.usecase.listapplicationsmanualreview;
 
+import com.crediya.model.applicationreviewitem.ApplicationReviewItem;
 import com.crediya.model.creditapplication.CreditApplication;
 import com.crediya.model.creditapplication.gateways.CreditApplicationRepository;
 import com.crediya.model.credittype.CreditType;
@@ -64,7 +65,7 @@ class ListApplicationsManualReviewUseCaseTest {
         Mockito.when(creditApplicationRepository.findByStateIdAndEmail(Mockito.anyInt(), Mockito.anyString())).thenReturn(getFixedApprovedApplications());
 
         StepVerifier.create(useCase.execute(DEFAULT_APPLICATION_STATE.getValue(), 1, 1))
-                .expectNextMatches(i -> i.getItems().getFirst().getTotalMonthlyDebtApprovedApplications().equals(30000000.0))
+                .expectNextMatches(r -> r.equals(getExpectedSuccess()))
                 .verifyComplete();
     }
 
@@ -78,7 +79,7 @@ class ListApplicationsManualReviewUseCaseTest {
         itemsPage.setPage(1);
         itemsPage.setItems(List.of(
                 new CreditApplication(
-                        1, 10000000.0, 12, "jdoe@example.com", 1, 1
+                        1, 7000000.0, 12, "jdoe@example.com", 1, 1
                 )
         ));
 
@@ -90,5 +91,29 @@ class ListApplicationsManualReviewUseCaseTest {
                 new CreditApplication(1, 10000000.0, 12, "jdoe@example.com", FIXED_STATE_APPROVED.getStateId(), 1),
                 new CreditApplication(1, 20000000.0, 12, "jdoe@example.com", FIXED_STATE_APPROVED.getStateId(), 1)
         );
+    }
+
+    private static ItemsPage<ApplicationReviewItem> getExpectedSuccess() {
+        ItemsPage<ApplicationReviewItem> itemsPage = new ItemsPage<>();
+
+        itemsPage.setTotalPages(1);
+        itemsPage.setSize(1);
+        itemsPage.setTotalItems(1L);
+        itemsPage.setPage(1);
+        itemsPage.setItems(List.of(
+                new ApplicationReviewItem(
+                        7000000.0,
+                        12,
+                        FIXED_USER.getEmail(),
+                        FIXED_USER.getName(),
+                        FREE_INVESTMENT_TYPE.getName(),
+                        FREE_INVESTMENT_TYPE.getInterestRate(),
+                        DEFAULT_APPLICATION_STATE.getValue(),
+                        FIXED_USER.getBaseSalary(),
+                        30000000.0
+                )
+        ));
+
+        return itemsPage;
     }
 }
