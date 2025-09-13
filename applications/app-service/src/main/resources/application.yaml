@@ -23,6 +23,8 @@ springdoc:
     path: "/v3/api-docs"
   swagger-ui:
     path: "/swagger-doc"
+  webjars:
+    prefix: "/webjars"
 management:
   endpoints:
     web:
@@ -34,3 +36,5 @@ management:
         enabled: true
 cors:
   allowed-origins: "http://localhost:4200,http://localhost:9011"
+jwt:
+  secret: "WQ1KHfpOuqSEYaDD7JDygKXguEu8NDohk8zcHrI2IJMiWjsi/ac4r6+RXUv9ljC6"
