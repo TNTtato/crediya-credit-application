@@ -28,7 +28,7 @@ class ListApplicationsManualReviewUseCaseTest {
     private static final State FIXED_STATE_PENDING = new State(1, DEFAULT_APPLICATION_STATE.getValue(), "Not reviews");
     private static final State FIXED_STATE_APPROVED = new State(2, APPROVED_APPLICATION.getValue(), "Approved");
     private static final User FIXED_USER = new User("jdoe@example.com", "John Doe", 10000000.0);
-    private static final CreditType FREE_INVESTMENT_TYPE = new CreditType(1, "Free Investment", 3000000.0, 20000000.0, 0.12f, false);
+    private static final CreditType FREE_INVESTMENT_TYPE = new CreditType(1, "Free Investment", 3000000.0, 20000000.0, 0.15f, false);
     private static final ItemsPage<CreditApplication> FIXED_PAGED_CREDIT_APPLICATION = getFixedApplicationsManualReview();
 
 
@@ -65,7 +65,10 @@ class ListApplicationsManualReviewUseCaseTest {
         Mockito.when(creditApplicationRepository.findByStateIdAndEmail(Mockito.anyInt(), Mockito.anyString())).thenReturn(getFixedApprovedApplications());
 
         StepVerifier.create(useCase.execute(DEFAULT_APPLICATION_STATE.getValue(), 1, 1))
-                .expectNextMatches(r -> r.equals(getExpectedSuccess()))
+                .expectNextMatches(r -> {
+                    r.getItems().getFirst().setTotalMonthlyDebtApprovedApplications(Math.ceil(r.getItems().getFirst().getTotalMonthlyDebtApprovedApplications()));
+                    return r.equals(getExpectedSuccess());
+                })
                 .verifyComplete();
     }
 
@@ -110,7 +113,7 @@ class ListApplicationsManualReviewUseCaseTest {
                         FREE_INVESTMENT_TYPE.getInterestRate(),
                         DEFAULT_APPLICATION_STATE.getValue(),
                         FIXED_USER.getBaseSalary(),
-                        30000000.0
+                        2694431.0
                 )
         ));
 

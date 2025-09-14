@@ -63,18 +63,23 @@ public class ListApplicationsManualReviewUseCase {
     }
 
     private void calculateExistingMonthlyTotalDebt(State s, CreditApplication i, ApplicationReviewItem item) {
+        item.setTotalMonthlyDebtApprovedApplications(0.0);
         stateRepository.findByName(DefaultValues.APPROVED_APPLICATION.getValue()).subscribe(
                 a -> {
                     creditApplicationRepository.findByStateIdAndEmail(s.getStateId(), i.getEmail())
-                            .collectList()
-                            .subscribe(
-                                    list -> {
-                                        item.setTotalMonthlyDebtApprovedApplications(
-                                                list.stream().map(CreditApplication::getCreditAmount)
-                                                        .reduce(0.0, Double::sum)
-                                        );
-                                    }
-                            );
+                            .subscribe(creditApplication -> {
+                                creditTypeRepository.findById(creditApplication.getCreditTypeId())
+                                        .subscribe(creditType -> {
+                                            Double totalDebt = creditApplication.getCreditAmount();
+                                            Double monthlyRate = Math.pow(1 + creditType.getInterestRate(), 1.0 / 12) - 1;
+                                            Integer n = item.getInstallments();
+
+                                            Double monthlyDebt = (totalDebt * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -n));
+                                            Double currentDebt = item.getTotalMonthlyDebtApprovedApplications();
+
+                                            item.setTotalMonthlyDebtApprovedApplications(currentDebt + monthlyDebt);
+                                        });
+                            });
                 }
         );
     }
