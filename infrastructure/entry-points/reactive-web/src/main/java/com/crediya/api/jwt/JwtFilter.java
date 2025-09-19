@@ -1,6 +1,8 @@
 package com.crediya.api.jwt;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
@@ -21,6 +23,8 @@ import java.util.List;
 public class JwtFilter implements WebFilter {
 
     private final JwtProvider jwtProvider;
+
+    private static final Logger logger = LoggerFactory.getLogger(JwtFilter.class);
 
     @Override
     public @NonNull Mono<Void> filter(ServerWebExchange exchange, @NonNull WebFilterChain chain) {
@@ -43,6 +47,7 @@ public class JwtFilter implements WebFilter {
 
             SecurityContextImpl context = new SecurityContextImpl(auth);
 
+            logger.info("JWT Authentication Success. Storing Security Context. Auth? [{}]", context.getAuthentication().isAuthenticated());
             return chain.filter(exchange)
                     .contextWrite(ReactiveSecurityContextHolder.withSecurityContext(Mono.just(context)));
 

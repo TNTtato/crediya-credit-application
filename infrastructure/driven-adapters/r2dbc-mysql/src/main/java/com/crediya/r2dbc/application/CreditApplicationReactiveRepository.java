@@ -11,10 +11,11 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface CreditApplicationReactiveRepository extends ReactiveCrudRepository<CreditApplicationEntity, Integer>,
-        ReactiveQueryByExampleExecutor<CreditApplicationEntity>,
-        PagingAndSortingRepository<CreditApplicationEntity, Integer> {
+        ReactiveQueryByExampleExecutor<CreditApplicationEntity> {
 
-    Mono<Page<CreditApplication>> findByStatusId(Integer stateId, Pageable pageable);
+    Flux<CreditApplication> findByStatusId(Integer stateId, Pageable pageable);
 
     Flux<CreditApplication> findByStatusIdAndEmail(Integer stateId, String email);
+
+    Mono<Long> countByStatusId(Integer statusId);
 }

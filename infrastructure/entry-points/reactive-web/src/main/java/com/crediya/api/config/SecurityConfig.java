@@ -42,6 +42,7 @@ public class SecurityConfig {
                                 "/swagger-ui/**"
                         ).permitAll()
                         .pathMatchers(HttpMethod.POST, applicationRoute).hasAnyRole("CLIENTE")
+                        .pathMatchers(HttpMethod.GET, applicationRoute).hasAnyRole("ADMIN", "ASESOR")
                         .anyExchange()
                         .authenticated())
                 .addFilterAt(jwtFilter, SecurityWebFiltersOrder.AUTHENTICATION)

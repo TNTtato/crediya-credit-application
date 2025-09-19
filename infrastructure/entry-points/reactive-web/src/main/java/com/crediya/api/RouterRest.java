@@ -91,6 +91,7 @@ public class RouterRest {
         return RouterFunctions
                 .route()
                 .path("/api/v1", builder -> builder.POST("/solicitud", handlerV1::listenCreateCreditApplicationUseCase))
+                .path("/api/v1", builder -> builder.GET("/solicitud", handlerV1::listenManualReviewUseCase))
                 .build();
     }
 }

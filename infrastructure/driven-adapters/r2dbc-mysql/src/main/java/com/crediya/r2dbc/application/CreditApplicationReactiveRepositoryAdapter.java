@@ -7,12 +7,15 @@ import com.crediya.r2dbc.entity.CreditApplicationEntity;
 import com.crediya.r2dbc.helper.ReactiveAdapterOperations;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.reactive.TransactionalOperator;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @Repository
 public class CreditApplicationReactiveRepositoryAdapter extends ReactiveAdapterOperations<
@@ -37,6 +40,19 @@ public class CreditApplicationReactiveRepositoryAdapter extends ReactiveAdapterO
     public Mono<ItemsPage<CreditApplication>> findByStateId(Integer stateId, int page, int size) {
 
         Pageable pageable = PageRequest.of(page, size);
+
+        return repository.findByStatusId(stateId, pageable)
+                .collectList()
+                .zipWith(repository.countByStatusId(stateId))
+                .map(tuple -> new PageImpl(tuple.getT1(), pageable, tuple.getT2()))
+                .map(p -> new ItemsPage<>(
+                        p.getNumber(),
+                        p.getSize(),
+                        p.getTotalElements(),
+                        p.getTotalPages(),
+                        p.getContent()));
+
+        /*
         return repository.findByStatusId(stateId, pageable)
                 .map(p -> new ItemsPage<>(
                         p.getNumber(),
@@ -45,6 +61,8 @@ public class CreditApplicationReactiveRepositoryAdapter extends ReactiveAdapterO
                         p.getTotalPages(),
                         p.getContent()
                 ));
+
+         */
     }
 
     @Override
